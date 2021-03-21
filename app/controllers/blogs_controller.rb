@@ -17,6 +17,11 @@ class BlogsController < ApplicationController
 
   # GET /blogs/1/edit
   def edit
+    if @blog.user_id == current_user.id
+      render 'edit'
+    else
+      redirect_to blogs_path
+    end
   end
 
   # POST /blogs or /blogs.json
@@ -36,6 +41,7 @@ class BlogsController < ApplicationController
 
   # PATCH/PUT /blogs/1 or /blogs/1.json
   def update
+    @blog = current_user.blogs.find(params[:id])
     respond_to do |format|
       if @blog.update(blog_params)
         format.html { redirect_to @blog, notice: "Blog was successfully updated." }
